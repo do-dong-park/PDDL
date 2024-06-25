@@ -1,6 +1,6 @@
 (define (domain house-painting)
   (:requirements :strips :typing :durative-actions :negative-preconditions :fluents)
-  
+
   (:types
     location resource - available
     house - location
@@ -25,7 +25,7 @@
     (travel_time ?r - resource ?from - location ?to - location)
     (paint_job_duration ?h - house ?f - floor)
   )
-  
+
   (:durative-action paint
     :parameters (?h - house ?f - floor ?p - painter)
     :duration (= ?duration (paint_job_duration ?h ?f))
