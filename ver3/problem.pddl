@@ -1,19 +1,43 @@
-(define (problem simple-paint-job)
-  (:domain simple-house-painting)
-  (:requirements :typing :durative-actions :action-costs)
+(define (problem paint-job)
+  (:domain house-painting)
+  (:requirements :timed-initial-literals)
   (:objects
-    house1 - house
-    painter1 - painter
-    base - location
+    red blue - house
+    jay - painter
+    pub - location
   )
   (:init
-    (at base painter1)
-    (available painter1)
-    (paintable house1)
-    (= (paint-duration house1) 4)
-    (= (travel-time base base) 1)
-    ; (= (total-cost) 0)
+    (= (cost) 0)
+
+    ; location
+    (is_above first ground)
+
+    (is_available red)
+    (= (paint_job_duration red ground) 4)
+    (= (paint_job_duration red first) 4)
+
+    (is_available blue)
+    (= (paint_job_duration blue ground) 4)
+    (= (paint_job_duration blue first) 4)
+
+    ; painter
+    (is_available jay)
+    (located_at jay pub)
+
+    (= (travel_time jay pub blue) 1)
+    (= (travel_time jay pub red) 3)
+    (= (travel_time jay red blue) 10)
+    (= (travel_time jay blue red) 10)
   )
-  (:goal (painted house1))
-  (:metric minimize (total-cost))
+  (:goal
+    (and
+      (paint_job_done red ground)
+      (paint_job_done red first)
+      (paint_job_done blue ground)
+      (paint_job_done blue first)
+    )
+  )
+  (:metric minimize
+    (cost)
+  )
 )

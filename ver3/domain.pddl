@@ -1,45 +1,62 @@
-(define (domain simple-house-painting)
-  (:requirements :strips :typing :durative-actions :fluents)
+(define (domain house-painting)
+  (:requirements :strips :typing :durative-actions :negative-preconditions :fluents)
+  
   (:types
-    house painter location
+    location resource - available
+    house - location
+    painter - resource
+    floor - object
   )
+
+  (:constants
+    ground first - floor
+  )
+
   (:predicates
-    (available ?p - painter)
-    (at ?l - location ?p - painter)
-    (paintable ?h - house)
-    (painted ?h - house)
+    (is_above ?f1 ?f2 - floor)
+    (is_available ?a - available)
+    (located_at ?r - resource ?l - location)
+    (paint_job_started ?h - house ?f - floor)
+    (paint_job_done ?h - house ?f - floor)
   )
+
   (:functions
-    (paint-duration ?h - house)
-    (travel-time ?from ?to - location)
-    ; (total-cost)
+    (cost)
+    (travel_time ?r - resource ?from - location ?to - location)
+    (paint_job_duration ?h - house ?f - floor)
   )
+  
   (:durative-action paint
-    :parameters (?h - house ?p - painter)
-    :duration (= ?duration (paint-duration ?h))
+    :parameters (?h - house ?f - floor ?p - painter)
+    :duration (= ?duration (paint_job_duration ?h ?f))
     :condition (and
-      (at start (available ?p))
-      (at start (paintable ?h))
-      (over all (available ?p))
+      (at start (not (paint_job_started ?h ?f)))
+      (at start (is_available ?h))
+      (at start (is_available ?p))
+      (at start (located_at ?p ?h))
     )
     :effect (and
-      (at start (not (available ?p)))
-      (at end (painted ?h))
-      (at end (available ?p))
-      (at start (increase (total-cost) (paint-duration ?h)))
+      (at start (increase (cost) (paint_job_duration ?h ?f)))
+      (at start (paint_job_started ?h ?f))
+      (at start (not (is_available ?h)))
+      (at start (not (is_available ?p)))
+      (at end (paint_job_done ?h ?f))
+      (at end (is_available ?h))
+      (at end (is_available ?p))
     )
   )
-  (:durative-action travel
+
+  (:durative-action move
     :parameters (?p - painter ?from ?to - location)
-    :duration (= ?duration (travel-time ?from ?to))
+    :duration (= ?duration (travel_time ?p ?from ?to))
     :condition (and
-      (at start (available ?p))
-      (at start (at ?from ?p))
+      (at start (located_at ?p ?from))
+      (at start (is_available ?p))
     )
     :effect (and
-      (at start (not (at ?from ?p)))
-      (at end (at ?to ?p))
-      (at start (increase (total-cost) (travel-time ?from ?to)))
+      (at start (increase (cost) (travel_time ?p ?from ?to)))
+      (at start (not (located_at ?p ?from)))
+      (at end (located_at ?p ?to))
     )
   )
 )
