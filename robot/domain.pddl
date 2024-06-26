@@ -6,8 +6,8 @@
         (at ?robot ?room)
         (is-in ?task ?room)
         (is-complete ?task)
-        (is-detachable ?task)
-        (is-non-detachable ?task)
+        (is-uncontrollable ?task)
+        (is-controllable ?task)
 
         (robot ?robot)
         (task ?task)
@@ -41,7 +41,7 @@
         )
     )
 
-    (:durative-action perform_non-detachable_task
+    (:durative-action perform_controllable_task
         :parameters (?robot ?task ?room)
         :duration (= ?duration 10)
         :condition (and
@@ -50,7 +50,7 @@
             (at start (room ?room))
 
             (at start (at ?robot ?room))
-            (at start (is-non-detachable ?task))
+            (at start (is-controllable ?task))
             (at start (is-in ?task ?room))
 
             (at start (available ?robot))
@@ -65,7 +65,7 @@
         )
     )
 
-    (:durative-action perform_detachable_task
+    (:durative-action perform_uncontrollable_task
         :parameters (?robot ?task ?room)
         :duration (= ?duration 10)
         :condition (and
@@ -74,7 +74,7 @@
             (at start (room ?room))
 
             (at start (at ?robot ?room))
-            (at start (is-detachable ?task))
+            (at start (is-uncontrollable ?task))
             (at start (is-in ?task ?room))
 
             (at start (available ?robot))
