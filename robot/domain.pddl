@@ -10,6 +10,8 @@
         (is-complete ?task)
         (is-detachable ?task)
         (is-non-detachable ?task)
+        (is-start ?task)
+        (is-end ?task)
 
         (next ?before_task ?after_task)
         (can-start ?task)
@@ -76,7 +78,7 @@
         )
     )
 
-    (:durative-action perform_detachable_task
+    (:durative-action perform_detachable_start_task
         :parameters (?robot ?task ?room)
         :duration (= ?duration 10)
         :condition (and
@@ -85,6 +87,34 @@
             (at start (room ?room))
 
             (at start (at ?robot ?room))
+            (at start (is-start ?task))
+            (at start (is-detachable ?task))
+            (at start (is-in ?task ?room))
+
+            (at start (available ?robot))
+            (over all (busy ?robot))
+        )
+        :effect (and
+            (at start (busy ?robot))
+            (at start (increase (cost) 10))
+
+            (at end (is-complete ?task))
+            (at end (not (busy ?robot)))
+            (at end (available ?robot))
+        )
+    )
+
+    (:durative-action perform_detachable_end_task
+        :parameters (?robot ?task ?room)
+        :duration (= ?duration 10)
+        :condition (and
+            (at start (robot ?robot))
+            (at start (task ?task))
+            (at start (room ?room))
+
+            (at start (at ?robot ?room))
+            (at start (is-end ?task))
+            (at start (can-start ?task))
             (at start (is-detachable ?task))
             (at start (is-in ?task ?room))
 
@@ -103,11 +133,14 @@
 
     (:durative-action wait
         :parameters (?robot ?before_task ?after_task)
-        :duration (= ?duration 5)
+        :duration (= ?duration 30)
         :condition (and
             (at start (robot ?robot))
             (at start (task ?before_task))
             (at start (task ?after_task))
+
+            (at start (is-start ?before_task))
+            (at start (is-end ?after_task))
 
             (at start (is-detachable ?before_task))
             (at start (is-detachable ?after_task))

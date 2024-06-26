@@ -37,6 +37,12 @@
         (is-in laundry-start bathroom)
         (is-in laundry-end bathroom)
 
+        (is-start laundry-start)
+        (is-end laundry-end)
+
+        (is-start toast-start)
+        (is-end toast-end)
+
         (next laundry-start laundry-end)
         (next toast-start toast-end)
 
