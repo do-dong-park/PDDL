@@ -21,14 +21,14 @@
     )
 
     (:functions
-        (cost)
-        (move_time ?from - room ?to - room)
-        (task_duration ?task)
+        (travel_time ?from ?to - room)
+        (task_duration ?task - task)
+        (waiting_time ?task - task)
     )
 
     (:durative-action move
         :parameters (?robot - robot ?from ?to - room)
-        :duration (= ?duration )
+        :duration (= ?duration (travel_time ?from ?to))
         :condition (and
             (over all (can-move ?from ?to))
             (at start (at ?robot ?from))
@@ -38,7 +38,6 @@
         )
         :effect (and
             (at start (busy ?robot))
-            (at start (increase (cost) 5))
 
             (at end (at ?robot ?to))
             (at end (not (at ?robot ?from)))
@@ -49,7 +48,7 @@
 
     (:durative-action perform_non-detachable_task
         :parameters (?robot - robot ?task - task ?room - room)
-        :duration (= ?duration 5)
+        :duration (= ?duration (task_duration ?task))
         :condition (and
             (at start (at ?robot ?room))
             (at start (is-non-detachable ?task))
@@ -60,7 +59,6 @@
         )
         :effect (and
             (at start (busy ?robot))
-            (at start (increase (cost) 10))
 
             (at end (is-complete ?task))
             (at end (not (busy ?robot)))
@@ -70,7 +68,7 @@
 
     (:durative-action perform_detachable_start_task
         :parameters (?robot - robot ?task - task ?room - room)
-        :duration (= ?duration 10)
+        :duration (= ?duration (task_duration ?task))
         :condition (and
             (at start (at ?robot ?room))
             (at start (is-start ?task))
@@ -82,7 +80,6 @@
         )
         :effect (and
             (at start (busy ?robot))
-            (at start (increase (cost) 10))
 
             (at end (is-complete ?task))
             (at end (not (busy ?robot)))
@@ -92,7 +89,7 @@
 
     (:durative-action perform_detachable_end_task
         :parameters (?robot - robot ?task - task ?room - room)
-        :duration (= ?duration 10)
+        :duration (= ?duration (task_duration ?task))
         :condition (and
             (at start (at ?robot ?room))
             (at start (is-end ?task))
@@ -105,7 +102,6 @@
         )
         :effect (and
             (at start (busy ?robot))
-            (at start (increase (cost) 10))
 
             (at end (is-complete ?task))
             (at end (not (busy ?robot)))
@@ -115,7 +111,7 @@
 
     (:durative-action wait
         :parameters (?robot - robot ?before_task ?after_task - task)
-        :duration (= ?duration 30)
+        :duration (= ?duration (waiting_time ?before_task))
         :condition (and
             (at start (is-start ?before_task))
             (at start (is-end ?after_task))

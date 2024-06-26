@@ -7,8 +7,6 @@
         robot - robot
     )
     (:init
-        (= (cost) 0)
-
         (can-move kitchen livingroom)
         (can-move livingroom kitchen)
         (can-move livingroom bathroom)
@@ -37,6 +35,21 @@
         (is-detachable laundry-end)
         (is-detachable toast-start)
         (is-detachable toast-end)
+
+        (= (travel_time kitchen livingroom) 1)
+        (= (travel_time livingroom kitchen) 1)
+        (= (travel_time bathroom livingroom) 2)
+        (= (travel_time livingroom bathroom) 2)
+
+        (= (task_duration toast-start) 2) ; 2 minutes
+        (= (task_duration toast-end) 1) ; 1 minute
+        (= (task_duration laundry-start) 5)
+        (= (task_duration laundry-end) 10)
+        (= (task_duration pour-milk) 10)
+        (= (task_duration clean-bathroom) 20) ; Adjust as necessary
+
+        (= (waiting_time laundry-start) 45) ; Adjust based on washing machine cycle
+        (= (waiting_time toast-start) 5) ; Duration of toast cooking
     )
     (:goal
         (and
