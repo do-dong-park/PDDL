@@ -1,13 +1,18 @@
 (define (domain household_robot)
-    (:requirements :strips :typing :fluents :durative-actions)
+    (:requirements :strips :typing :fluents :durative-actions :constraints)
 
     (:predicates
         (can-move ?from ?to)
         (at ?robot ?room)
+
         (is-in ?task ?room)
+
         (is-complete ?task)
         (is-detachable ?task)
         (is-non-detachable ?task)
+
+        (next ?before_task ?after_task)
+        (can-start ?task)
 
         (robot ?robot)
         (task ?task)
@@ -15,6 +20,10 @@
 
         (busy ?robot)
         (available ?robot)
+    )
+
+    (:functions
+        (cost)
     )
 
     (:durative-action move
@@ -33,6 +42,7 @@
         )
         :effect (and
             (at start (busy ?robot))
+            (at start (increase (cost) 5))
 
             (at end (at ?robot ?to))
             (at end (not (at ?robot ?from)))
@@ -43,7 +53,7 @@
 
     (:durative-action perform_non-detachable_task
         :parameters (?robot ?task ?room)
-        :duration (= ?duration 10)
+        :duration (= ?duration 5)
         :condition (and
             (at start (robot ?robot))
             (at start (task ?task))
@@ -58,8 +68,9 @@
         )
         :effect (and
             (at start (busy ?robot))
-            (at end (is-complete ?task))
+            (at start (increase (cost) 10))
 
+            (at end (is-complete ?task))
             (at end (not (busy ?robot)))
             (at end (available ?robot))
         )
@@ -82,9 +93,30 @@
         )
         :effect (and
             (at start (busy ?robot))
+            (at start (increase (cost) 10))
+
             (at end (is-complete ?task))
             (at end (not (busy ?robot)))
             (at end (available ?robot))
         )
     )
+
+    (:durative-action wait
+        :parameters (?robot ?before_task ?after_task)
+        :duration (= ?duration 5)
+        :condition (and
+            (at start (robot ?robot))
+            (at start (task ?before_task))
+            (at start (task ?after_task))
+
+            (at start (is-detachable ?before_task))
+            (at start (is-detachable ?after_task))
+            (at start (is-complete ?before_task))
+            (at start (next ?before_task ?after_task))
+        )
+        :effect (and
+            (at end (can-start ?after_task))
+        )
+    )
+
 )
