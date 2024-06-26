@@ -36,7 +36,9 @@
             (at start (rover ?rover))
             (at start (waypoint ?from-waypoint))
             (at start (waypoint ?to-waypoint))
+
             (over all (can-move ?from-waypoint ?to-waypoint))
+            
             (at start (at ?rover ?from-waypoint))
             (at start (> (battery-amount ?rover) 8)))
 

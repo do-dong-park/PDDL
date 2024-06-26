@@ -1,7 +1,7 @@
 (define (problem household_problem)
     (:domain household_robot)
     (:objects
-        livingroom kitchen bathroom washing-dishes clean-livingroom cook laundry robot
+        livingroom kitchen bathroom toast-start toast-end laundry-start laundry-end pour-milk robot
     )
     (:init
         (room livingroom)
@@ -13,34 +13,35 @@
         (can-move livingroom bathroom)
         (can-move bathroom livingroom)
 
-        (task washing-dishes)
-        (task clean-livingroom)
-        (task cook)
-        (task laundry)
+        (task toast-start)
+        (task toast-end)
+        (task laundry-start)
+        (task laundry-end)
+        (task pour-milk)
 
-        (is-controllable washing-dishes)
-        (is-controllable clean-livingroom)
-        (is-uncontrollable cook)
-        (is-uncontrollable laundry)
+        (is-non-detachable pour-milk)
+        (is-detachable laundry-start)
+        (is-detachable laundry-end)
 
-        (is-in washing-dishes kitchen)
-        (is-in cook kitchen)
-        (is-in clean-livingroom livingroom)
-        (is-in laundry bathroom)
+        (is-in toast-start kitchen)
+        (is-in toast-end kitchen)
+        (is-in pour-milk livingroom)
+        (is-in laundry-start bathroom)
+        (is-in laundry-end bathroom)
 
         (robot robot)
-        (move_pending robot)
-        (task_pending robot)
+        (available robot)
         (at robot livingroom)
     )
     (:goal
         (and
             (at robot livingroom)
 
-            (is-complete washing-dishes)
-            (is-complete cook)
-            (is-complete laundry)
-            (is-complete clean-livingroom)
+            (is-complete laundry-start)
+            (is-complete laundry-end)
+            (is-complete toast-start)
+            (is-complete toast-end)
+            (is-complete pour-milk)
         )
     )
 

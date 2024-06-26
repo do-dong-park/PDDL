@@ -1,9 +1,0 @@
-{
-  "defaultDomain": "/home/dongkyu/pdk_ws/study/PDDL/ver2/domain2.pddl",
-  "defaultOptions": "",
-  "cases": [
-    {
-      "problem": "/home/dongkyu/pdk_ws/study/PDDL/ver2/problem2.pddl"
-    }
-  ]
-}
