@@ -1,5 +1,5 @@
 (define (domain household_robot)
-    (:requirements :strips :typing :fluents :durative-actions :negative-preconditions)
+    (:requirements :strips :typing :fluents :durative-actions)
 
     (:predicates
         (can-move ?from ?to)
@@ -8,6 +8,8 @@
         (is-complete ?task)
         (is-uncontrollable ?task)
         (is-controllable ?task)
+        (is-available ?robot)
+
         (robot ?robot)
         (task ?task)
         (room ?room)
@@ -20,12 +22,15 @@
             (at start (robot ?robot))
             (at start (room ?from))
             (at start (room ?to))
-            (over all (can-move ?from ? to))
+
             (at start (at ?robot ?from))
+            
+            (over all (can-move ?from ? to))
         )
         :effect (and
-            (at end (at ?robot ?to))
             (at start (not (at ?robot ?from)))
+            
+            (at end (at ?robot ?to))
         )
     )
 
@@ -38,10 +43,9 @@
             (at start (room ?room))
 
             (at start (at ?robot ?room))
-            (at start (is-controllable ?task))
-            
-
             (over all (is-in ?task ?room))
+            
+            (at start (is-controllable ?task))
         )
         :effect (and
             (at end (is-complete ?task))
@@ -56,7 +60,6 @@
             (at start (task ?task))
             (at start (room ?room))
 
-            
             (at start (at ?robot ?room))
             (at start (is-uncontrollable ?task))
 
