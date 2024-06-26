@@ -8,11 +8,13 @@
         (is-complete ?task)
         (is-uncontrollable ?task)
         (is-controllable ?task)
-        (is-available ?robot)
-
+        
         (robot ?robot)
         (task ?task)
         (room ?room)
+
+        (move_pending ?robot)
+        (task_pending ?robot)
     )
 
     (:durative-action move
@@ -23,50 +25,52 @@
             (at start (room ?from))
             (at start (room ?to))
 
+            (over all (can-move ?from ?to))
+
             (at start (at ?robot ?from))
-            
-            (over all (can-move ?from ? to))
+            (at start (move_pending ?robot))
         )
         :effect (and
-            (at start (not (at ?robot ?from)))
-            
             (at end (at ?robot ?to))
+            (at end (task_pending ?robot))
         )
     )
 
     (:durative-action perform_controllable_task
         :parameters (?robot ?task ?room)
-        :duration (= ?duration 10) ; assuming controllable tasks take 10 units of time
+        :duration (= ?duration 10)
         :condition (and
             (at start (robot ?robot))
             (at start (task ?task))
             (at start (room ?room))
-
-            (at start (at ?robot ?room))
-            (over all (is-in ?task ?room))
             
+            (at start (at ?robot ?room))
             (at start (is-controllable ?task))
+            (at start (is-in ?task ?room))
+            (at start (task_pending ?robot))
         )
         :effect (and
             (at end (is-complete ?task))
+            (at end (move_pending ?robot))
         )
     )
 
     (:durative-action perform_uncontrollable_task
         :parameters (?robot ?task ?room)
-        :duration (= ?duration 10) ; assuming controllable tasks take 10 units of time
+        :duration (= ?duration 10)
         :condition (and
             (at start (robot ?robot))
             (at start (task ?task))
             (at start (room ?room))
-
+            
             (at start (at ?robot ?room))
             (at start (is-uncontrollable ?task))
-
-            (over all (is-in ?task ?room))
+            (at start (is-in ?task ?room))
+            (at start (task_pending ?robot))
         )
         :effect (and
             (at end (is-complete ?task))
+            (at end (move_pending ?robot))
         )
     )
 )

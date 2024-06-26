@@ -29,6 +29,8 @@
         (is-in laundry bathroom)
 
         (robot robot)
+        (move_pending robot)
+        (task_pending robot)
         (at robot livingroom)
     )
     (:goal
