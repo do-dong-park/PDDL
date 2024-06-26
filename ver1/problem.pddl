@@ -4,12 +4,15 @@
   (:objects
     red blue - house
     jay pro - painter
-    pub - location)
+    pub - location
+  )
 
   (:init
     ; red house
-    (at 3 (is_available red))
-    (at 13 (not (is_available red)))
+    (at 3
+      (is_available red))
+    (at 13
+      (not (is_available red)))
     (= (paint_job_duration red ground) 4)
     (= (paint_job_duration red first) 4)
     (= (clean-up_job_duration red) 1)
@@ -38,10 +41,11 @@
     (= (cost) 0)
   )
 
-  (:goal (and
-    (forall 
-      (?h - house)
-      (clean-up_job_done ?h)
+  (:goal
+    (and
+      (forall
+        (?h - house)
+        (clean-up_job_done ?h)
       )
     )
   )
@@ -54,17 +58,19 @@
   ;   ))
   ; )
   (:constraints
-        (and
-            (after
-                (paint_job_done blue first)
-                (had-coffee-with-owner blue)
-            )
-            (after
-                (had-coffee-with-owner blue)
-                (paint_job_started blue ground)
-            )
+    (and
+      (after
+        (paint_job_done blue first)
+        (had-coffee-with-owner blue)
       )
+      (after
+        (had-coffee-with-owner blue)
+        (paint_job_started blue ground)
+      )
+    )
   )
 
-  (:metric minimize (cost))
+  (:metric minimize
+    (cost)
+  )
 )
