@@ -9,6 +9,7 @@
         (can-move ?from ?to - room)
         (at ?robot - robot ?room - room)
         (is-in ?task - task ?room - room)
+
         (is-complete ?task - task)
         (is-detachable ?task - task)
         (is-non-detachable ?task - task)
@@ -16,6 +17,7 @@
         (is-end ?task - task)
         (next ?before_task ?after_task - task)
         (can-start ?task - task)
+
         (busy ?robot - robot)
         (available ?robot - robot)
     )

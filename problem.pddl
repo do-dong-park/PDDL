@@ -31,6 +31,9 @@
         (is-end laundry-end)
         (is-end toast-end)
 
+        (next laundry-start laundry-end)
+        (next toast-start toast-end)
+
         (= (travel_time kitchen livingroom) 1)
         (= (travel_time livingroom kitchen) 1)
         (= (travel_time bathroom livingroom) 2)
@@ -45,9 +48,6 @@
 
         (= (waiting_time laundry-start) 60)
         (= (waiting_time toast-start) 5)
-
-        (next laundry-start laundry-end)
-        (next toast-start toast-end)
 
         (at robot bathroom)
         (available robot)
