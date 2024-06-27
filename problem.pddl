@@ -1,6 +1,7 @@
 (define (problem household_problem)
     (:domain household_robot)
 
+    
     (:objects
         livingroom kitchen bathroom - room
         toast-start toast-end laundry-start laundry-end pour-milk clean-bathroom - task

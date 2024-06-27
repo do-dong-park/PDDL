@@ -1,4 +1,0 @@
-{
-    "pddlParser.executableOrService": "/home/dongkyu/.config/Code/User/globalStorage/jan-dolejsi.pddl/val/Val-20210401.1-Linux/bin/Parser",
-    "pddlParser.executableOptions": "$(domain) $(problem)"
-}
